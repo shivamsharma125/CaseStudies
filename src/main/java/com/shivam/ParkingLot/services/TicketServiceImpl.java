@@ -2,12 +2,8 @@ package com.shivam.ParkingLot.services;
 
 import com.shivam.ParkingLot.exceptions.GateNotFoundException;
 import com.shivam.ParkingLot.exceptions.OperatorNotFoundException;
-import com.shivam.ParkingLot.exceptions.VehicleNotFoundException;
 import com.shivam.ParkingLot.models.*;
-import com.shivam.ParkingLot.repositories.GateRepository;
-import com.shivam.ParkingLot.repositories.OperatorRepository;
-import com.shivam.ParkingLot.repositories.TicketRepository;
-import com.shivam.ParkingLot.repositories.VehicleRepository;
+import com.shivam.ParkingLot.repositories.*;
 import com.shivam.ParkingLot.strategies.SlotAssignmentStrategy;
 
 import java.util.Date;
@@ -19,37 +15,45 @@ public class TicketServiceImpl implements TicketService {
     private OperatorRepository operatorRepository;
     private SlotAssignmentStrategy slotAssignmentStrategy;
     private TicketRepository ticketRepository;
+    private ParkingSlotRepository parkingSlotRepository;
 
     public TicketServiceImpl(VehicleRepository vehicleRepository,
                              GateRepository gateRepository,
                              OperatorRepository operatorRepository,
                              SlotAssignmentStrategy slotAssignmentStrategy,
-                             TicketRepository ticketRepository){
+                             TicketRepository ticketRepository,
+                             ParkingSlotRepository parkingSlotRepository){
         this.vehicleRepository = vehicleRepository;
         this.gateRepository = gateRepository;
         this.operatorRepository = operatorRepository;
         this.slotAssignmentStrategy = slotAssignmentStrategy;
         this.ticketRepository = ticketRepository;
+        this.parkingSlotRepository = parkingSlotRepository;
     }
 
     @Override
-    public Ticket generateTicket(Long vehicleId, Long gateId, Long operatorId) {
+    public Ticket generateTicket(Long gateId, Long operatorId, String licensePlateNumber, VehicleType vehicleType) {
         Ticket ticket = new Ticket();
         /*
         * Set the vehicle
-        *   - check if the vehicle with this vehicleId is present in DB or not
+        *   - check if the vehicle with this licensePlateNumber is present in DB or not
         *   - if present -> add the vehicle in the ticket
         *   - if not -> first add the vehicle in the DB then in the ticket
         * */
 
-        Optional<Vehicle> optionalVehicle = vehicleRepository.getVehicleById(vehicleId);
+        Optional<Vehicle> optionalVehicle = vehicleRepository.getVehicleByLicensePlateNumber(licensePlateNumber);
 
-        if (optionalVehicle.isEmpty()){
-            throw new VehicleNotFoundException(vehicleId);
+        Vehicle savedVehicle = null;
+        if (optionalVehicle.isPresent()){
+            savedVehicle = optionalVehicle.get();
+        } else {
+            // save the vehicle in the db
+            Vehicle vehicle = new Vehicle();
+            vehicle.setLicensePlateNumber(licensePlateNumber);
+            vehicle.setVehicleType(vehicleType);
+            savedVehicle = vehicleRepository.save(vehicle);
         }
-
-        Vehicle vehicle = optionalVehicle.get();
-        ticket.setVehicle(vehicle);
+        ticket.setVehicle(savedVehicle);
 
         // Set time
         ticket.setEntryTime(new Date());
@@ -75,8 +79,18 @@ public class TicketServiceImpl implements TicketService {
         ticket.setOperator(operator);
 
         // Parking slot
-        ParkingSlot parkingSlot = slotAssignmentStrategy.assignSlot(vehicle);
-        ticket.setParkingSlot(parkingSlot);
+        /*
+         * Find a parking slot for provide vehicle type
+         * Mark the slot as FILLED
+         * save the changes to the db
+         * add the parking slot in the ticket
+         */
+        ParkingSlot parkingSlot = slotAssignmentStrategy.findSlot(savedVehicle.getVehicleType());
+        parkingSlot.setParkingSlotStatus(ParkingSlotStatus.FILLED);
+
+        ParkingSlot saveParkingSlot = parkingSlotRepository.save(parkingSlot);
+
+        ticket.setParkingSlot(saveParkingSlot);
 
         return ticketRepository.save(ticket);
     }

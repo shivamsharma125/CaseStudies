@@ -1,17 +1,13 @@
 package com.shivam.ParkingLot.dtos;
 
+import com.shivam.ParkingLot.models.VehicleType;
+
 public class GenerateTicketRequestDto {
-    private long vehicleId;
-    private long gateId;
-    private long operatorId;
+    private Long gateId;
+    private Long operatorId;
+    private String licensePlateNumber;
+    private VehicleType vehicleType;
 
-    public long getVehicleId() {
-        return vehicleId;
-    }
-
-    public void setVehicleId(long vehicleId) {
-        this.vehicleId = vehicleId;
-    }
 
     public long getGateId() {
         return gateId;
@@ -27,5 +23,21 @@ public class GenerateTicketRequestDto {
 
     public void setOperatorId(long operatorId) {
         this.operatorId = operatorId;
+    }
+
+    public String getLicensePlateNumber() {
+        return licensePlateNumber;
+    }
+
+    public void setLicensePlateNumber(String licensePlateNumber) {
+        this.licensePlateNumber = licensePlateNumber;
+    }
+
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
     }
 }

@@ -4,5 +4,6 @@ public enum ParkingSlotStatus {
     OPEN,
     CLOSED,
     UNDER_MAINTENANCE,
-    FILLED
+    FILLED,
+    EMPTY
 }

@@ -18,11 +18,17 @@ public class TicketController {
 
         try{
             Ticket ticket = ticketService.generateTicket(
-                    requestDto.getVehicleId(),
                     requestDto.getGateId(),
-                    requestDto.getOperatorId()
+                    requestDto.getOperatorId(),
+                    requestDto.getLicensePlateNumber(),
+                    requestDto.getVehicleType()
             );
-            responseDto.setTicket(ticket);
+
+            responseDto.setTicketId(ticket.getId());
+            responseDto.setOperatorName(ticket.getOperator().getName());
+            responseDto.setLicensePlateNumber(ticket.getVehicle().getLicensePlateNumber());
+            responseDto.setParkingSlotNumber(ticket.getParkingSlot().getSlotNumber());
+            responseDto.setEntryTime(ticket.getEntryTime());
             responseDto.setResponseStatus(ResponseStatus.SUCCESS);
         } catch (Exception ex){
             responseDto.setResponseStatus(ResponseStatus.FAILURE);

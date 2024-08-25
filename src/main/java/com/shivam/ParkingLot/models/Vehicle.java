@@ -1,24 +1,15 @@
 package com.shivam.ParkingLot.models;
 
 public class Vehicle extends BaseModel {
-    private String vehicleNumber;
-    private Owner owner;
+    private String licensePlateNumber;
     private VehicleType vehicleType;
 
-    public String getVehicleNumber() {
-        return vehicleNumber;
+    public String getLicensePlateNumber() {
+        return licensePlateNumber;
     }
 
-    public void setVehicleNumber(String vehicleNumber) {
-        this.vehicleNumber = vehicleNumber;
-    }
-
-    public Owner getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setLicensePlateNumber(String licensePlateNumber) {
+        this.licensePlateNumber = licensePlateNumber;
     }
 
     public VehicleType getVehicleType() {

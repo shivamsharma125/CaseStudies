@@ -8,7 +8,7 @@ public class ParkingLot extends BaseModel {
     private List<ParkingFloor> parkingFloors;
     private List<Gate> entryGates;
     private List<Gate> exitGates;
-    private List<SupportedVehicleType> supportedVehicleTypes;
+    private List<SupportedVehicleType> vehicleTypes;
 
     public String getName() {
         return name;
@@ -50,11 +50,11 @@ public class ParkingLot extends BaseModel {
         this.exitGates = exitGates;
     }
 
-    public List<SupportedVehicleType> getSupportedVehicleTypes() {
-        return supportedVehicleTypes;
+    public List<SupportedVehicleType> getVehicleTypes() {
+        return vehicleTypes;
     }
 
-    public void setSupportedVehicleTypes(List<SupportedVehicleType> supportedVehicleTypes) {
-        this.supportedVehicleTypes = supportedVehicleTypes;
+    public void setVehicleTypes(List<SupportedVehicleType> vehicleTypes) {
+        this.vehicleTypes = vehicleTypes;
     }
 }

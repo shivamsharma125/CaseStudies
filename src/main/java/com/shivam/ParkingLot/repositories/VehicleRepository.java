@@ -1,15 +1,29 @@
 package com.shivam.ParkingLot.repositories;
 
+import com.shivam.ParkingLot.models.Operator;
 import com.shivam.ParkingLot.models.Vehicle;
 
+import java.util.Map;
 import java.util.Optional;
+import java.util.TreeMap;
 
 public class VehicleRepository {
-    public Optional<Vehicle> getVehicleById(Long id){
-        return null;
+    private Map<Long, Vehicle> vehicles = new TreeMap<>();
+    private long id = 0;
+
+    public Optional<Vehicle> getVehicleByLicensePlateNumber(String licensePlateNumber){
+        for (Vehicle vehicle : vehicles.values()){
+            if (vehicle.getLicensePlateNumber().equals(licensePlateNumber)){
+                return Optional.of(vehicle);
+            }
+        }
+        return Optional.empty();
     }
 
     public Vehicle save(Vehicle vehicle){
-        return null;
+        id += 1;
+        vehicle.setId(id);
+        vehicles.put(id,vehicle);
+        return vehicle;
     }
 }
