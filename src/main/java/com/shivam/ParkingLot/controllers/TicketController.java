@@ -13,7 +13,7 @@ public class TicketController {
         this.ticketService = ticketService;
     }
 
-    GenerateTicketResponseDto generateTicket(GenerateTicketRequestDto requestDto){
+    public GenerateTicketResponseDto generateTicket(GenerateTicketRequestDto requestDto){
         GenerateTicketResponseDto responseDto = new GenerateTicketResponseDto();
 
         try{

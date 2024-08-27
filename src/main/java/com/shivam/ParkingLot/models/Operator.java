@@ -5,6 +5,12 @@ public class Operator extends BaseModel {
     private String email;
     private String phoneNumber;
 
+    public Operator(String name, String email, String phoneNumber) {
+        this.name = name;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+    }
+
     public String getName() {
         return name;
     }

@@ -5,6 +5,7 @@ import com.shivam.ParkingLot.exceptions.OperatorNotFoundException;
 import com.shivam.ParkingLot.models.*;
 import com.shivam.ParkingLot.repositories.*;
 import com.shivam.ParkingLot.strategies.SlotAssignmentStrategy;
+import com.shivam.ParkingLot.strategies.SlotAssignmentStrategyFactory;
 
 import java.util.Date;
 import java.util.Optional;
@@ -13,20 +14,17 @@ public class TicketServiceImpl implements TicketService {
     private VehicleRepository vehicleRepository;
     private GateRepository gateRepository;
     private OperatorRepository operatorRepository;
-    private SlotAssignmentStrategy slotAssignmentStrategy;
     private TicketRepository ticketRepository;
     private ParkingSlotRepository parkingSlotRepository;
 
     public TicketServiceImpl(VehicleRepository vehicleRepository,
                              GateRepository gateRepository,
                              OperatorRepository operatorRepository,
-                             SlotAssignmentStrategy slotAssignmentStrategy,
                              TicketRepository ticketRepository,
                              ParkingSlotRepository parkingSlotRepository){
         this.vehicleRepository = vehicleRepository;
         this.gateRepository = gateRepository;
         this.operatorRepository = operatorRepository;
-        this.slotAssignmentStrategy = slotAssignmentStrategy;
         this.ticketRepository = ticketRepository;
         this.parkingSlotRepository = parkingSlotRepository;
     }
@@ -85,7 +83,14 @@ public class TicketServiceImpl implements TicketService {
          * save the changes to the db
          * add the parking slot in the ticket
          */
-        ParkingSlot parkingSlot = slotAssignmentStrategy.findSlot(savedVehicle.getVehicleType());
+        ParkingLot parkingLot = gate.getParkingLot();
+        SlotAssignmentStrategy slotAssignmentStrategy = SlotAssignmentStrategyFactory.
+                getSlotAssignmentStrategyByType(parkingLot.getSlotAssignmentStrategyType());
+
+        ParkingSlot parkingSlot = slotAssignmentStrategy.findSlot(
+                gate.getParkingLot(),
+                savedVehicle.getVehicleType()
+        );
         parkingSlot.setParkingSlotStatus(ParkingSlotStatus.FILLED);
 
         ParkingSlot saveParkingSlot = parkingSlotRepository.save(parkingSlot);

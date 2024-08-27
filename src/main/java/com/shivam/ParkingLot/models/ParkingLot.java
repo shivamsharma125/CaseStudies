@@ -6,9 +6,9 @@ public class ParkingLot extends BaseModel {
     private String name;
     private ParkingLotStatus parkingLotStatus;
     private List<ParkingFloor> parkingFloors;
-    private List<Gate> entryGates;
-    private List<Gate> exitGates;
+    private List<Gate> gates;
     private List<SupportedVehicleType> vehicleTypes;
+    private SlotAssignmentStrategyType slotAssignmentStrategyType;
 
     public String getName() {
         return name;
@@ -34,20 +34,12 @@ public class ParkingLot extends BaseModel {
         this.parkingFloors = parkingFloors;
     }
 
-    public List<Gate> getEntryGates() {
-        return entryGates;
+    public List<Gate> getGates() {
+        return gates;
     }
 
-    public void setEntryGates(List<Gate> entryGates) {
-        this.entryGates = entryGates;
-    }
-
-    public List<Gate> getExitGates() {
-        return exitGates;
-    }
-
-    public void setExitGates(List<Gate> exitGates) {
-        this.exitGates = exitGates;
+    public void setGates(List<Gate> gates) {
+        this.gates = gates;
     }
 
     public List<SupportedVehicleType> getVehicleTypes() {
@@ -56,5 +48,13 @@ public class ParkingLot extends BaseModel {
 
     public void setVehicleTypes(List<SupportedVehicleType> vehicleTypes) {
         this.vehicleTypes = vehicleTypes;
+    }
+
+    public SlotAssignmentStrategyType getSlotAssignmentStrategyType() {
+        return slotAssignmentStrategyType;
+    }
+
+    public void setSlotAssignmentStrategyType(SlotAssignmentStrategyType slotAssignmentStrategyType) {
+        this.slotAssignmentStrategyType = slotAssignmentStrategyType;
     }
 }

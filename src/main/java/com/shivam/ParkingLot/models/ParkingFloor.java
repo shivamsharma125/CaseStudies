@@ -5,8 +5,15 @@ import java.util.List;
 public class ParkingFloor extends BaseModel {
     private String floorNumber;
     private ParkingFloorStatus parkingFloorStatus;
-    private List<SupportedVehicleType> vehicleTypes;
+    private List<VehicleType> vehicleTypes;
     private List<ParkingSlot> parkingSlots;
+
+    public ParkingFloor(String floorNumber, ParkingFloorStatus parkingFloorStatus, List<VehicleType> vehicleTypes, List<ParkingSlot> parkingSlots) {
+        this.floorNumber = floorNumber;
+        this.parkingFloorStatus = parkingFloorStatus;
+        this.vehicleTypes = vehicleTypes;
+        this.parkingSlots = parkingSlots;
+    }
 
     public String getFloorNumber() {
         return floorNumber;
@@ -24,11 +31,11 @@ public class ParkingFloor extends BaseModel {
         this.parkingFloorStatus = parkingFloorStatus;
     }
 
-    public List<SupportedVehicleType> getVehicleTypes() {
+    public List<VehicleType> getVehicleTypes() {
         return vehicleTypes;
     }
 
-    public void setVehicleTypes(List<SupportedVehicleType> vehicleTypes) {
+    public void setVehicleTypes(List<VehicleType> vehicleTypes) {
         this.vehicleTypes = vehicleTypes;
     }
 

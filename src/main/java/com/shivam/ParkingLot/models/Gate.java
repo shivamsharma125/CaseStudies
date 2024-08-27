@@ -5,6 +5,15 @@ public class Gate extends BaseModel {
     private GateType gateType;
     private GateStatus gateStatus;
     private Operator operator;
+    private ParkingLot parkingLot;
+
+    public Gate(String gateNumber, GateType gateType, GateStatus gateStatus, Operator operator, ParkingLot parkingLot) {
+        this.gateNumber = gateNumber;
+        this.gateType = gateType;
+        this.gateStatus = gateStatus;
+        this.operator = operator;
+        this.parkingLot = parkingLot;
+    }
 
     public String getGateNumber() {
         return gateNumber;
@@ -36,5 +45,13 @@ public class Gate extends BaseModel {
 
     public void setOperator(Operator operator) {
         this.operator = operator;
+    }
+
+    public ParkingLot getParkingLot() {
+        return parkingLot;
+    }
+
+    public void setParkingLot(ParkingLot parkingLot) {
+        this.parkingLot = parkingLot;
     }
 }
