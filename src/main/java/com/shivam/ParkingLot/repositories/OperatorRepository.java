@@ -5,6 +5,6 @@ import com.shivam.ParkingLot.models.Operator;
 import java.util.Optional;
 
 public interface OperatorRepository {
-    Optional<Operator> getOperatorById(Long operatorId);
+    Optional<Operator> findOperatorById(Long operatorId);
     Operator save(Operator operator);
 }

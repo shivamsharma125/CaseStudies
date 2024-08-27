@@ -9,6 +9,14 @@ public class Payment extends BaseModel {
     private Date paymentTime;
     private String referenceNumber;
 
+    public Payment(PaymentMode paymentMode, int amount, PaymentStatus paymentStatus, Date paymentTime, String referenceNumber) {
+        this.paymentMode = paymentMode;
+        this.amount = amount;
+        this.paymentStatus = paymentStatus;
+        this.paymentTime = paymentTime;
+        this.referenceNumber = referenceNumber;
+    }
+
     public PaymentMode getPaymentMode() {
         return paymentMode;
     }

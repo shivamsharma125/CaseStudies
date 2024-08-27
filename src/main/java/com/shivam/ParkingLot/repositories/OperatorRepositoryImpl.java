@@ -10,7 +10,7 @@ public class OperatorRepositoryImpl implements OperatorRepository {
     private Map<Long, Operator> operators = new TreeMap<>();
     private long id = 0;
 
-    public Optional<Operator> getOperatorById(Long operatorId){
+    public Optional<Operator> findOperatorById(Long operatorId){
         Operator operator = operators.get(operatorId);
         return Optional.ofNullable(operator);
     }

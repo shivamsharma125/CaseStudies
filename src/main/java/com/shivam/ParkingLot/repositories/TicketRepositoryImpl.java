@@ -3,6 +3,7 @@ package com.shivam.ParkingLot.repositories;
 import com.shivam.ParkingLot.models.Ticket;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 public class TicketRepositoryImpl implements TicketRepository {
@@ -16,5 +17,11 @@ public class TicketRepositoryImpl implements TicketRepository {
         }
         tickets.put(ticket.getId(), ticket);
         return ticket;
+    }
+
+    @Override
+    public Optional<Ticket> findTicketById(long ticketId) {
+        Ticket ticket = tickets.get(ticketId);
+        return Optional.ofNullable(ticket);
     }
 }

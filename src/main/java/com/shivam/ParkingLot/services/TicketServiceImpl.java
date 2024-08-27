@@ -30,7 +30,7 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public Ticket generateTicket(Long gateId, Long operatorId, String licensePlateNumber, VehicleType vehicleType) {
+    public Ticket generateTicket(Long gateId, Long operatorId, String licensePlateNumber, VehicleType vehicleType) throws GateNotFoundException, OperatorNotFoundException {
         Ticket ticket = new Ticket();
         /*
         * Set the vehicle
@@ -57,20 +57,20 @@ public class TicketServiceImpl implements TicketService {
         ticket.setEntryTime(new Date());
 
         // Set the gate
-        Optional<Gate> optionalGate = gateRepository.getGateById(gateId);
+        Optional<Gate> optionalGate = gateRepository.findGateById(gateId);
 
         if (optionalGate.isEmpty()){
-            throw new GateNotFoundException(gateId);
+            throw new GateNotFoundException("Gate with id " + gateId + " is not present in the DB.");
         }
 
         Gate gate = optionalGate.get();
         ticket.setGate(gate);
 
         // Set the operator
-        Optional<Operator> optionalOperator = operatorRepository.getOperatorById(operatorId);
+        Optional<Operator> optionalOperator = operatorRepository.findOperatorById(operatorId);
 
         if (optionalOperator.isEmpty()){
-            throw new OperatorNotFoundException(operatorId);
+            throw new OperatorNotFoundException("Operator with id " + operatorId + " is not present in the DB.");
         }
 
         Operator operator = optionalOperator.get();

@@ -1,14 +1,16 @@
 package com.shivam.ParkingLot;
 
+import com.shivam.ParkingLot.controllers.BillController;
 import com.shivam.ParkingLot.controllers.TicketController;
-import com.shivam.ParkingLot.dtos.GenerateTicketRequestDto;
-import com.shivam.ParkingLot.dtos.GenerateTicketResponseDto;
-import com.shivam.ParkingLot.dtos.ResponseStatus;
+import com.shivam.ParkingLot.dtos.*;
 import com.shivam.ParkingLot.models.*;
 import com.shivam.ParkingLot.repositories.*;
+import com.shivam.ParkingLot.services.BillService;
+import com.shivam.ParkingLot.services.BillServiceImpl;
 import com.shivam.ParkingLot.services.TicketService;
 import com.shivam.ParkingLot.services.TicketServiceImpl;
 
+import java.util.Date;
 import java.util.List;
 
 public class Client {
@@ -73,12 +75,58 @@ public class Client {
         requestDto.setLicensePlateNumber("DL123");
 
         GenerateTicketResponseDto responseDto = ticketController.generateTicket(requestDto);
+        Long ticketId = responseDto.getTicketId();
 
         if (responseDto.getResponseStatus().equals(ResponseStatus.SUCCESS)){
             System.out.println("Ticket issued. Slot number: " + responseDto.getParkingSlotNumber());
         }
         else {
             System.out.println("Error occurred while issuing ticket: " + responseDto.getFailureMessage());
+        }
+
+        PaymentRepository paymentRepository = new PaymentRepositoryImpl();
+        Payment payment1 = new Payment(
+                PaymentMode.CASH,
+                500,
+                PaymentStatus.SUCCESS,
+                new Date(),
+                "reference-payment1"
+        );
+        Payment payment2 = new Payment(
+                PaymentMode.UPI,
+                500,
+                PaymentStatus.SUCCESS,
+                new Date(),
+                "reference-payment2"
+        );
+        paymentRepository.save(payment1);
+        paymentRepository.save(payment2);
+
+        BillRepository billRepository = new BillRepositoryImpl();
+
+        BillService billService = new BillServiceImpl(
+                gateRepository,
+                operatorRepository,
+                ticketRepository,
+                paymentRepository,
+                billRepository
+        );
+
+        BillController billController = new BillController(billService);
+
+        GenerateBillRequestDto billRequestDto = new GenerateBillRequestDto();
+        billRequestDto.setAmount(1000);
+        billRequestDto.setExitTime(new Date());
+        billRequestDto.setGateId(gate2.getId());
+        billRequestDto.setOperatorId(operator2.getId());
+        billRequestDto.setTicketId(ticketId);
+        billRequestDto.setPaymentIds(List.of(payment1.getId(),payment2.getId()));
+
+        GenerateBillResponseDto billResponseDto = billController.generateBill(billRequestDto);
+        if (ResponseStatus.SUCCESS.equals(billResponseDto.getResponseStatus())){
+            System.out.println("Bill generated successfully. Bill id: " + billResponseDto.getBillId());
+        } else {
+            System.out.println("Error occurred while generating bill: " + billResponseDto.getFailureMessage());
         }
     }
 }

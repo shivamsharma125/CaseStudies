@@ -10,7 +10,7 @@ public class GateRepositoryImpl implements GateRepository {
     private Map<Long, Gate> gates = new TreeMap<>();
     private long id = 0;
 
-    public Optional<Gate> getGateById(Long gateId) {
+    public Optional<Gate> findGateById(Long gateId) {
         Gate gate = gates.get(gateId);
         return Optional.ofNullable(gate);
     }

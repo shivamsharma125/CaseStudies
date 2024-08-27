@@ -5,6 +5,6 @@ import com.shivam.ParkingLot.models.Gate;
 import java.util.Optional;
 
 public interface GateRepository {
-    Optional<Gate> getGateById(Long gateId);
+    Optional<Gate> findGateById(Long gateId);
     Gate save(Gate gate);
 }
